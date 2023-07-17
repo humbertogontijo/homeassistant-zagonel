@@ -5,9 +5,10 @@ import json
 import logging
 from asyncio import Future
 from dataclasses import asdict, dataclass
-from enum import Enum
+from enum import Enum, IntEnum
 from typing import Any, Literal, Optional
 
+import async_timeout
 import paho.mqtt.client as mqtt
 from dacite import Config, from_dict
 
@@ -30,14 +31,23 @@ class ZagonelApiClientAuthenticationError(
     """Exception to indicate an authentication error."""
 
 
-class ZagonelControlMode(int, Enum):
+class ZagonelEnum(IntEnum):
+    """ZagonelEnum."""
+
+    @property
+    def name(self) -> str:
+        """ZagonelEnum.name."""
+        return super().name.lower()
+
+
+class ZagonelControlMode(ZagonelEnum):
     """ZagonelControlMode."""
 
     MANUAL = 0
     AUTOMATIC = 1
 
 
-class ZagonelParentalMode(int, Enum):
+class ZagonelParentalMode(ZagonelEnum):
     """ZagonelParentalMode."""
 
     OFF = 0
@@ -46,7 +56,7 @@ class ZagonelParentalMode(int, Enum):
     SOUND_AND_SHUTDOWN = 3
 
 
-class ZagonelRGBMode(int, Enum):
+class ZagonelRGBMode(ZagonelEnum):
     """ZagonelRGBMode."""
 
     POWER = 0
@@ -152,8 +162,7 @@ class ZagonelApiClient:
         self._device_id = device_id
         self._client = mqtt.Client(transport="websockets")
         self.data: Optional[ZagonelData] = None
-        self.status_fut: Optional[Future] = None
-        self.chars_fut: Optional[Future] = None
+        self.waiting_queue: list[Future] = []
 
     def on_connect(self, _userdata=None, _flags_dict=None, _reason=None, _properties=None):
         """on_connect."""
@@ -171,9 +180,6 @@ class ZagonelApiClient:
                 self.data.chars = ZagonelChars.from_dict(payload)
             else:
                 self.data.chars.update(payload)
-            if self.chars_fut and not self.chars_fut.done():
-                loop = self.chars_fut.get_loop()
-                loop.call_soon_threadsafe(self.chars_fut.set_result, True)
         elif payload.get("Type") == "Status":
             if not self.data:
                 status = ZagonelStatus.from_dict(payload)
@@ -182,9 +188,10 @@ class ZagonelApiClient:
                 self.data.status = ZagonelStatus.from_dict(payload)
             else:
                 self.data.status.update(payload)
-            if self.status_fut and not self.status_fut.done():
-                loop = self.status_fut.get_loop()
-                loop.call_soon_threadsafe(self.status_fut.set_result, True)
+        if len(self.waiting_queue) > 0:
+            fut = self.waiting_queue.pop()
+            loop = fut.get_loop()
+            loop.call_soon_threadsafe(fut.set_result, True)
 
     def is_connected(self):
         """is_connected."""
@@ -202,18 +209,17 @@ class ZagonelApiClient:
         """send_command."""
         if self.is_running():
             raise ZagonelApiClientError("Can't send commands while device is running")
-        command = payload["command"]
-        fut = Future()
-        if command == "getStatus":
-            self.status_fut = fut
-        else:
-            self.chars_fut = fut
         info = self._client.publish(f"{self._device_id}_AS", json.dumps(payload))
         if info.rc != mqtt.MQTT_ERR_SUCCESS:
             raise ZagonelApiClientError(f"Failed to publish ({mqtt.error_string(info.rc)})")
         _LOGGER.debug(f"Sent message {payload}")
-        if fut:
-            await fut
+        try:
+            async with async_timeout.timeout(5):
+                fut = Future()
+                self.waiting_queue.append(fut)
+                await fut
+        except TimeoutError as exception:
+            raise ZagonelApiClientError(exception) from exception
 
     def is_running(self):
         """Check if device is running."""

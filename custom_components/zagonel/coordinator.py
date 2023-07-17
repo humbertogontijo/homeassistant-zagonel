@@ -4,7 +4,6 @@ from __future__ import annotations
 import asyncio
 from datetime import timedelta
 
-import async_timeout
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed
@@ -57,11 +56,8 @@ class ZagonelDataUpdateCoordinator(DataUpdateCoordinator[ZagonelData]):
     async def _async_update_data(self):
         """Update data via library."""
         try:
-            async with async_timeout.timeout(5):
-                await self.client.async_load_data()
-                return self.client.data
-        except TimeoutError as exception:
-            raise UpdateFailed(exception) from exception
+            await self.client.async_load_data()
+            return self.client.data
         except ZagonelApiClientAuthenticationError as exception:
             raise ConfigEntryAuthFailed(exception) from exception
         except ZagonelApiClientError as exception:
