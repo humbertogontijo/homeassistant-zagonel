@@ -11,6 +11,7 @@ from homeassistant.components.climate import (
     HVACMode,
 )
 from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.util import slugify
 
 from .const import DOMAIN
@@ -64,7 +65,7 @@ class ZagonelClimate(ZagonelEntity, ClimateEntity):
     @property
     def hvac_mode(self) -> HVACMode | None:
         """Return the current HVAC mode."""
-        return HVACMode.OFF if self.coordinator.data.status.St == "RUN" else HVACMode.HEAT
+        return HVACMode.OFF if self.coordinator.client.is_running() else HVACMode.HEAT
 
     @property
     def hvac_action(self) -> HVACAction:
@@ -85,9 +86,7 @@ class ZagonelClimate(ZagonelEntity, ClimateEntity):
         """async_set_temperature."""
         temperature = kwargs[ATTR_TEMPERATURE]
         await self.send("Preset_1", math.floor(temperature * 1000))
-        await self.send("Preset_2", math.floor(temperature * 1000))
-        await self.send("Preset_3", math.floor(temperature * 1000))
-        await self.send("Preset_4", math.floor(temperature * 1000))
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
         """async_set_hvac_mode."""
+        raise HomeAssistantError("Can't change mode from the api")

@@ -37,7 +37,7 @@ class ZagonelDataUpdateCoordinator(DataUpdateCoordinator[ZagonelData]):
             hass=hass,
             logger=LOGGER,
             name=DOMAIN,
-            update_interval=timedelta(seconds=1),
+            update_interval=timedelta(seconds=5),
         )
         self.scheduled_refresh: asyncio.TimerHandle | None = None
 
@@ -59,11 +59,7 @@ class ZagonelDataUpdateCoordinator(DataUpdateCoordinator[ZagonelData]):
         try:
             async with async_timeout.timeout(5):
                 await self.client.async_load_data()
-                data = self.client.data
-                while data is None or data.chars is None or data.status is None:
-                    await asyncio.sleep(1)
-                    data = self.client.data
-            return data
+                return self.client.data
         except TimeoutError as exception:
             raise UpdateFailed(exception) from exception
         except ZagonelApiClientAuthenticationError as exception:

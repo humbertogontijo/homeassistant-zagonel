@@ -93,44 +93,44 @@ class ZagonelBase:
 class ZagonelChars(ZagonelBase):
     """ZagonelChars."""
 
-    Type: Literal["Chars"]
-    User_Id: str
-    Device_Id: str
-    Hw_Id: str
-    Hw_Version: str
-    Fw_Version: str
-    Fw_Timestamp: str
-    Control_Mode: ZagonelControlMode
-    Rgb_Mode: ZagonelRGBMode
-    Rgb_Color: str
-    Buzzer_Volume: int
-    Parental_Mode: ZagonelParentalMode
-    Parental_Limit: int
-    Preset_1: int
-    Preset_2: int
-    Preset_3: int
-    Preset_4: int
-    Wifi_SSID: str
+    Type: Optional[Literal["Chars"]] = None
+    User_Id: Optional[str] = None
+    Device_Id: Optional[str] = None
+    Hw_Id: Optional[str] = None
+    Hw_Version: Optional[str] = None
+    Fw_Version: Optional[str] = None
+    Fw_Timestamp: Optional[str] = None
+    Control_Mode: Optional[ZagonelControlMode] = None
+    Rgb_Mode: Optional[ZagonelRGBMode] = None
+    Rgb_Color: Optional[str] = None
+    Buzzer_Volume: Optional[int] = None
+    Parental_Mode: Optional[ZagonelParentalMode] = None
+    Parental_Limit: Optional[int] = None
+    Preset_1: Optional[int] = None
+    Preset_2: Optional[int] = None
+    Preset_3: Optional[int] = None
+    Preset_4: Optional[int] = None
+    Wifi_SSID: Optional[str] = None
 
 
 @dataclass
 class ZagonelStatus(ZagonelBase):
     """ZagonelStatus."""
 
-    Type: Literal["Status"]
-    St: str
-    Fl: int
-    Vi: int
-    Ti: int
-    To: int
-    Ts: int
-    Ps: int
-    De: int
-    Pw: int
-    Hp: int
-    Up: int
-    Pp: int
-    Wi: int
+    Type: Optional[Literal["Status"]] = None
+    St: Optional[str] = None
+    Fl: Optional[int] = None
+    Vi: Optional[int] = None
+    Ti: Optional[int] = None
+    To: Optional[int] = None
+    Ts: Optional[int] = None
+    Ps: Optional[int] = None
+    De: Optional[int] = None
+    Pw: Optional[int] = None
+    Hp: Optional[int] = None
+    Up: Optional[int] = None
+    Pp: Optional[int] = None
+    Wi: Optional[int] = None
 
 
 @dataclass
@@ -200,6 +200,8 @@ class ZagonelApiClient:
 
     async def send_command(self, payload: dict):
         """send_command."""
+        if self.is_running():
+            raise ZagonelApiClientError("Can't send commands while device is running")
         command = payload["command"]
         fut = Future()
         if command == "getStatus":
@@ -213,10 +215,13 @@ class ZagonelApiClient:
         if fut:
             await fut
 
+    def is_running(self):
+        """Check if device is running."""
+        return self.data.status.St == "RUN" if self.data and self.data.status else False
+
     async def async_load_data(self):
         """Get data from the API."""
         if not self.is_connected():
             await self.connect()
-        if not self.data:
-            await self.send_command({"command": "getChars"})
-            await self.send_command({"command": "getStatus"})
+        await self.send_command({"command": "getChars"})
+        await self.send_command({"command": "getStatus"})
