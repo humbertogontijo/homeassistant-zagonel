@@ -1,0 +1,17 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "description": "Type your device id",
+                "data": {
+                    "device_id": "Device id"
+                }
+            }
+        },
+        "error": {
+            "auth": "Device id is wrong.",
+            "connection": "Unable to connect to the server.",
+            "unknown": "Unknown error occurred."
+        }
+    }
+}

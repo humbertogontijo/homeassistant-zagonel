@@ -1,0 +1,8 @@
+colorlog==6.7.0
+homeassistant==2023.7.2
+pip>=21.0,<23.2
+ruff==0.0.267
+paho-mqtt~=1.6.1
+voluptuous~=0.13.1
+
+dacite~=1.8.1
