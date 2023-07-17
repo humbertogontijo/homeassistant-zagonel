@@ -31,11 +31,15 @@ class ZagonelApiClientAuthenticationError(
 
 
 class ZagonelControlMode(int, Enum):
+    """ZagonelControlMode."""
+
     MANUAL = 0
     AUTOMATIC = 1
 
 
 class ZagonelParentalMode(int, Enum):
+    """ZagonelParentalMode."""
+
     OFF = 0
     SOUND = 1
     SHUTDOWN = 2
@@ -43,6 +47,8 @@ class ZagonelParentalMode(int, Enum):
 
 
 class ZagonelRGBMode(int, Enum):
+    """ZagonelRGBMode."""
+
     POWER = 0
     TEMPERATURE = 1
     FIXED = 2
@@ -50,8 +56,10 @@ class ZagonelRGBMode(int, Enum):
 
 @dataclass
 class ZagonelBase:
+    """ZagonelBase."""
 
     def update(self, data: dict):
+        """Update."""
         for key, value in data.items():
             if hasattr(self, key):
                 if key == "Control_Mode":
@@ -65,10 +73,12 @@ class ZagonelBase:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]):
+        """from_dict."""
         if isinstance(data, dict):
             return from_dict(cls, data, config=Config(cast=[Enum]))
 
     def as_dict(self) -> dict:
+        """as_dict."""
         return asdict(
             self,
             dict_factory=lambda _fields: {
@@ -81,6 +91,8 @@ class ZagonelBase:
 
 @dataclass
 class ZagonelChars(ZagonelBase):
+    """ZagonelChars."""
+
     Type: Literal["Chars"]
     User_Id: str
     Device_Id: str
@@ -103,6 +115,8 @@ class ZagonelChars(ZagonelBase):
 
 @dataclass
 class ZagonelStatus(ZagonelBase):
+    """ZagonelStatus."""
+
     Type: Literal["Status"]
     Fl: int
     Vi: int
@@ -120,6 +134,8 @@ class ZagonelStatus(ZagonelBase):
 
 @dataclass
 class ZagonelData(ZagonelBase):
+    """ZagonelData."""
+
     chars: Optional[ZagonelChars] = None
     status: Optional[ZagonelStatus] = None
 
@@ -139,9 +155,11 @@ class ZagonelApiClient:
         self.chars_fut: Optional[Future] = None
 
     def on_connect(self, _userdata=None, _flags_dict=None, _reason=None, _properties=None):
+        """on_connect."""
         self._client.subscribe(f"{self._device_id}_SA")
 
     def on_message(self, _client=None, _userdata=None, message: mqtt.MQTTMessage = None):
+        """on_message."""
         payload: dict = json.loads(message.payload)
         _LOGGER.debug(f"Got message {payload}")
         if payload.get("Type") == "Chars":
@@ -152,7 +170,8 @@ class ZagonelApiClient:
                 self.data.chars = ZagonelChars.from_dict(payload)
             else:
                 self.data.chars.update(payload)
-            self.chars_fut.set_result(True)
+            loop = self.chars_fut.get_loop()
+            loop.call_soon_threadsafe(self.chars_fut.set_result, True)
         elif payload.get("Type") == "Status":
             if not self.data:
                 status = ZagonelStatus.from_dict(payload)
@@ -161,12 +180,15 @@ class ZagonelApiClient:
                 self.data.status = ZagonelStatus.from_dict(payload)
             else:
                 self.data.status.update(payload)
-            self.status_fut.set_result(True)
+            loop = self.status_fut.get_loop()
+            loop.call_soon_threadsafe(self.status_fut.set_result, True)
 
     def is_connected(self):
+        """is_connected."""
         return self._client.is_connected()
 
     async def connect(self):
+        """connect."""
         if not self.is_connected():
             self._client.on_connect = self.on_connect
             self._client.on_message = self.on_message
@@ -174,6 +196,7 @@ class ZagonelApiClient:
             self._client.loop_start()
 
     async def send_command(self, payload: dict):
+        """send_command."""
         command = payload["command"]
         fut = Future()
         if command == "getStatus":

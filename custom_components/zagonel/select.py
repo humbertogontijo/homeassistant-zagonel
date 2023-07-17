@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Type
 
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.util import slugify
@@ -16,8 +15,10 @@ from .entity import ZagonelEntity
 
 @dataclass
 class ZagonelSelectEntityDescriptionMixin:
+    """ZagonelSelectEntityDescriptionMixin."""
+
     dict_key: str
-    enum: Type[Enum]
+    enum: type[Enum]
 
 
 @dataclass
@@ -71,6 +72,7 @@ async def async_setup_entry(hass, entry, async_add_devices):
 
 class ZagonelSelect(ZagonelEntity, SelectEntity):
     """zagonel Select class."""
+
     entity_description: ZagonelSelectEntityDescription
 
     def __init__(

@@ -27,6 +27,7 @@ class ZagonelEntity(CoordinatorEntity[ZagonelDataUpdateCoordinator]):
         )
 
     async def send(self, command: str, value: Optional[Any] = None):
+        """send."""
         payload = {
             "command": command
         }

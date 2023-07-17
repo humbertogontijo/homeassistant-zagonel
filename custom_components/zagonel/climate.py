@@ -82,6 +82,7 @@ class ZagonelClimate(ZagonelEntity, ClimateEntity):
         return math.floor(self.coordinator.data.status.Ts / 1000)
 
     async def async_set_temperature(self, **kwargs) -> None:
+        """async_set_temperature."""
         temperature = kwargs[ATTR_TEMPERATURE]
         await self.send("Preset_1", math.floor(temperature * 1000))
         await self.send("Preset_2", math.floor(temperature * 1000))
@@ -89,6 +90,7 @@ class ZagonelClimate(ZagonelEntity, ClimateEntity):
         await self.send("Preset_4", math.floor(temperature * 1000))
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
+        """async_set_hvac_mode."""
         if hvac_mode == HVACMode.OFF:
             await self.async_set_temperature(**{ATTR_TEMPERATURE: 0})
         else:
