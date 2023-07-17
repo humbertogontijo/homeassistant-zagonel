@@ -37,7 +37,7 @@ class ZagonelDataUpdateCoordinator(DataUpdateCoordinator[ZagonelData]):
             hass=hass,
             logger=LOGGER,
             name=DOMAIN,
-            update_interval=timedelta(seconds=5),
+            update_interval=timedelta(seconds=1),
         )
         self.scheduled_refresh: asyncio.TimerHandle | None = None
 

@@ -118,6 +118,7 @@ class ZagonelStatus(ZagonelBase):
     """ZagonelStatus."""
 
     Type: Literal["Status"]
+    St: str
     Fl: int
     Vi: int
     Ti: int
@@ -170,8 +171,9 @@ class ZagonelApiClient:
                 self.data.chars = ZagonelChars.from_dict(payload)
             else:
                 self.data.chars.update(payload)
-            loop = self.chars_fut.get_loop()
-            loop.call_soon_threadsafe(self.chars_fut.set_result, True)
+            if self.chars_fut and not self.chars_fut.done():
+                loop = self.chars_fut.get_loop()
+                loop.call_soon_threadsafe(self.chars_fut.set_result, True)
         elif payload.get("Type") == "Status":
             if not self.data:
                 status = ZagonelStatus.from_dict(payload)
@@ -180,8 +182,9 @@ class ZagonelApiClient:
                 self.data.status = ZagonelStatus.from_dict(payload)
             else:
                 self.data.status.update(payload)
-            loop = self.status_fut.get_loop()
-            loop.call_soon_threadsafe(self.status_fut.set_result, True)
+            if self.status_fut and not self.status_fut.done():
+                loop = self.status_fut.get_loop()
+                loop.call_soon_threadsafe(self.status_fut.set_result, True)
 
     def is_connected(self):
         """is_connected."""

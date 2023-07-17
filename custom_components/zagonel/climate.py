@@ -64,7 +64,7 @@ class ZagonelClimate(ZagonelEntity, ClimateEntity):
     @property
     def hvac_mode(self) -> HVACMode | None:
         """Return the current HVAC mode."""
-        return HVACMode.OFF if self.current_temperature == 0 else HVACMode.HEAT
+        return HVACMode.OFF if self.coordinator.data.status.St == "RUN" else HVACMode.HEAT
 
     @property
     def hvac_action(self) -> HVACAction:
@@ -91,7 +91,3 @@ class ZagonelClimate(ZagonelEntity, ClimateEntity):
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
         """async_set_hvac_mode."""
-        if hvac_mode == HVACMode.OFF:
-            await self.async_set_temperature(**{ATTR_TEMPERATURE: 0})
-        else:
-            await self.async_set_temperature(**{ATTR_TEMPERATURE: self.current_temperature})

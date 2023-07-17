@@ -16,6 +16,7 @@ from .coordinator import ZagonelDataUpdateCoordinator
 PLATFORMS: list[Platform] = [
     Platform.CLIMATE,
     Platform.LIGHT,
+    Platform.NUMBER,
     Platform.SELECT,
 ]
 
