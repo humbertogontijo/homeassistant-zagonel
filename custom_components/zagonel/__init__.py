@@ -18,6 +18,7 @@ PLATFORMS: list[Platform] = [
     Platform.LIGHT,
     Platform.NUMBER,
     Platform.SELECT,
+    Platform.TIME
 ]
 
 

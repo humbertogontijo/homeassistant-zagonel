@@ -207,7 +207,8 @@ class ZagonelApiClient:
 
     async def send_command(self, payload: dict):
         """send_command."""
-        if self.is_running():
+        command = payload["command"]
+        if self.is_running() and command == "getChars":
             raise ZagonelApiClientError("Can't send commands while device is running")
         info = self._client.publish(f"{self._device_id}_AS", json.dumps(payload))
         if info.rc != mqtt.MQTT_ERR_SUCCESS:
@@ -229,5 +230,6 @@ class ZagonelApiClient:
         """Get data from the API."""
         if not self.is_connected():
             await self.connect()
-        await self.send_command({"command": "getChars"})
         await self.send_command({"command": "getStatus"})
+        if not self.is_running():
+            await self.send_command({"command": "getChars"})
