@@ -41,7 +41,7 @@
         }
       },
       "shower_control_mode": {
-        "name": "Mode de controle da ducha",
+        "name": "Modo de controle da ducha",
         "state": {
           "manual": "Manual",
           "automatic": "Automatico"

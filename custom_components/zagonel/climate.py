@@ -49,7 +49,6 @@ class ZagonelClimate(ZagonelEntity, ClimateEntity):
     _attr_target_temperature_step = 1
     _attr_hvac_modes = [HVACMode.OFF, HVACMode.HEAT]
     _attr_temperature_unit = UnitOfTemperature.CELSIUS
-    _attr_translation_key = DOMAIN
     _attr_min_temp = 25
     _attr_max_temp = 50
 
