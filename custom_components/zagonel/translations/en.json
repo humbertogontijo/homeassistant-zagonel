@@ -22,10 +22,10 @@
       "state_attributes": {
         "preset_mode": {
           "state": {
-            "Preset_1": "Preset 1",
-            "Preset_2": "Preset 2",
-            "Preset_3": "Preset 3",
-            "Preset_4": "Preset 4"
+            "preset_1": "Preset 1",
+            "preset_2": "Preset 2",
+            "preset_3": "Preset 3",
+            "preset_4": "Preset 4"
           }
         }
       }
