@@ -18,6 +18,16 @@
     "climate": {
       "shower": {
         "name": "Ducha"
+      },
+      "state_attributes": {
+        "preset_mode": {
+          "state": {
+            "Preset_1": "Predefinido 1",
+            "Preset_2": "Predefinido 2",
+            "Preset_3": "Predefinido 3",
+            "Preset_4": "Predefinido 4"
+          }
+        }
       }
     },
     "light": {
@@ -59,6 +69,37 @@
     "time": {
       "shower_parental_limit": {
         "name": "Tempo limite controle dos pais"
+      }
+    },
+    "sensor": {
+      "shower_state": {
+        "name": "Estado da ducha",
+        "state": {
+          "RUN": "Ligado",
+          "IDL": "Ocioso",
+          "PSE": "Desligando"
+        }
+      },
+      "shower_water_flow": {
+        "name": "Fluxo de água da ducha"
+      },
+      "shower_voltage": {
+        "name": "Tensão da ducha"
+      },
+      "shower_expected_temperature": {
+        "name": "Temperatura esperada da ducha"
+      },
+      "shower_target_power": {
+        "name": "Potencia alvo da ducha"
+      },
+      "shower_power": {
+        "name": "Potencia da ducha"
+      },
+      "shower_uptime": {
+        "name": "Tempo de atividade da ducha"
+      },
+      "shower_wifi_strength": {
+        "name": "Sinal de wifi da ducha"
       }
     }
   }

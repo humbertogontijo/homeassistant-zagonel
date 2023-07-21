@@ -166,7 +166,11 @@ class ZagonelApiClient:
 
     def on_connect(self, _userdata=None, _flags_dict=None, _reason=None, _properties=None):
         """on_connect."""
-        self._client.subscribe(f"{self._device_id}_SA")
+        _LOGGER.debug("Connected to mqtt")
+        (info, _) = self._client.subscribe(f"{self._device_id}_SA")
+        if info != mqtt.MQTT_ERR_SUCCESS:
+            raise ZagonelApiClientError(f"Failed to subscribe ({mqtt.error_string(info)})")
+        _LOGGER.debug(f"Subscribed to {self._device_id}_SA")
 
     def on_message(self, _client=None, _userdata=None, message: mqtt.MQTTMessage = None):
         """on_message."""
@@ -201,6 +205,7 @@ class ZagonelApiClient:
         if not self.is_connected():
             self._client.on_connect = self.on_connect
             self._client.on_message = self.on_message
+            _LOGGER.debug("Connecting to mqtt")
             self._client.connect(host="smartbanho.zagonel.com.br", port=58083)
             self._client.loop_start()
 

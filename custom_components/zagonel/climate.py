@@ -44,12 +44,14 @@ async def async_setup_entry(hass, entry, async_add_devices):
 class ZagonelClimate(ZagonelEntity, ClimateEntity):
     """Zagonel Climate class."""
 
-    _attr_supported_features = ClimateEntityFeature.TARGET_TEMPERATURE
+    _attr_supported_features = ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.PRESET_MODE
     _attr_target_temperature_step = 1
     _attr_hvac_modes = [HVACMode.OFF, HVACMode.HEAT]
     _attr_temperature_unit = UnitOfTemperature.CELSIUS
     _attr_min_temp = 25
     _attr_max_temp = 50
+    _attr_preset_mode = "Preset_1"
+    _attr_preset_modes = ["Preset_1", "Preset_2", "Preset_3", "Preset_4"]
 
     def __init__(
             self,
@@ -74,12 +76,16 @@ class ZagonelClimate(ZagonelEntity, ClimateEntity):
     @property
     def target_temperature(self) -> float | None:
         """Return the temperature we try to reach."""
-        return math.floor(self.coordinator.data.status.Ts / 1000)
+        return math.floor(getattr(self.coordinator.data.chars, self.preset_mode) / 1000)
+
+    def set_preset_mode(self, preset_mode: str) -> None:
+        """Set new preset mode."""
+        self._attr_preset_mode = preset_mode
 
     async def async_set_temperature(self, **kwargs) -> None:
         """async_set_temperature."""
         temperature = kwargs[ATTR_TEMPERATURE]
-        await self.send("Preset_1", math.floor(temperature * 1000))
+        await self.send(self.preset_mode, math.floor(temperature * 1000))
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
         """async_set_hvac_mode."""

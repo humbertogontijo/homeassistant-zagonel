@@ -25,7 +25,7 @@ class ZagonelSelectEntityDescriptionMixin:
 class ZagonelSelectEntityDescription(
     SelectEntityDescription, ZagonelSelectEntityDescriptionMixin
 ):
-    """Class to describe an Roborock select entity."""
+    """ZagonelSelectEntityDescription."""
 
 
 ENTITY_DESCRIPTIONS = (
