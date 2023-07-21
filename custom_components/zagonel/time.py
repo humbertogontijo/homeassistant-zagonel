@@ -11,8 +11,9 @@ from .entity import ZagonelEntity
 
 ENTITY_DESCRIPTIONS = (
     TimeEntityDescription(
-        key="parental_limit",
+        key="shower_parental_limit",
         name="Parental Limit",
+        translation_key="shower_parental_limit",
         icon="mdi:timer-stop",
     ),
 )

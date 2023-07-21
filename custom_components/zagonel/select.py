@@ -30,27 +30,30 @@ class ZagonelSelectEntityDescription(
 
 ENTITY_DESCRIPTIONS = (
     ZagonelSelectEntityDescription(
-        key="parental_mode",
+        key="shower_parental_mode",
+        name="Shower Parental Mode",
+        translation_key="shower_parental_mode",
         dict_key="Parental_Mode",
         enum=ZagonelParentalMode,
-        name="Parental Mode",
-        icon="mdi:format-quote-close",
+        icon="mdi:account-lock",
         options=[parental_mode.name for parental_mode in ZagonelParentalMode]
     ),
     ZagonelSelectEntityDescription(
-        key="control_mode",
+        key="shower_control_mode",
+        name="Shower Control Mode",
+        translation_key="shower_control_mode",
         dict_key="Control_Mode",
         enum=ZagonelControlMode,
-        name="Control Mode",
-        icon="mdi:format-quote-close",
+        icon="mdi:refresh-auto",
         options=[control_mode.name for control_mode in ZagonelControlMode]
     ),
     ZagonelSelectEntityDescription(
-        key="rgb_mode",
+        key="shower_rgb_mode",
+        name="Shower RGB Mode",
+        translation_key="shower_rgb_mode",
         dict_key="Rgb_Mode",
         enum=ZagonelRGBMode,
-        name="RGB Mode",
-        icon="mdi:format-quote-close",
+        icon="mdi:led-on",
         options=[rgb_mode.name for rgb_mode in ZagonelRGBMode]
     ),
 )

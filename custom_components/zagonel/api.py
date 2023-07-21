@@ -3,14 +3,14 @@ from __future__ import annotations
 
 import json
 import logging
-from asyncio import Future
 from dataclasses import asdict, dataclass
 from enum import Enum, IntEnum
 from typing import Any, Literal, Optional
 
-import async_timeout
 import paho.mqtt.client as mqtt
 from dacite import Config, from_dict
+
+from custom_components.zagonel.zagonel_future import ZagonelFuture
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -162,7 +162,7 @@ class ZagonelApiClient:
         self._device_id = device_id
         self._client = mqtt.Client(transport="websockets")
         self.data: Optional[ZagonelData] = None
-        self.waiting_queue: list[Future] = []
+        self.waiting_queue: list[ZagonelFuture] = []
 
     def on_connect(self, _userdata=None, _flags_dict=None, _reason=None, _properties=None):
         """on_connect."""
@@ -190,8 +190,7 @@ class ZagonelApiClient:
                 self.data.status.update(payload)
         if len(self.waiting_queue) > 0:
             fut = self.waiting_queue.pop()
-            loop = fut.get_loop()
-            loop.call_soon_threadsafe(fut.set_result, True)
+            fut.resolve(True)
 
     def is_connected(self):
         """is_connected."""
@@ -215,10 +214,9 @@ class ZagonelApiClient:
             raise ZagonelApiClientError(f"Failed to publish ({mqtt.error_string(info.rc)})")
         _LOGGER.debug(f"Sent message {payload}")
         try:
-            async with async_timeout.timeout(5):
-                fut = Future()
-                self.waiting_queue.append(fut)
-                await fut
+            fut = ZagonelFuture()
+            self.waiting_queue.append(fut)
+            await fut.async_get(5)
         except TimeoutError as exception:
             raise ZagonelApiClientError(exception) from exception
 

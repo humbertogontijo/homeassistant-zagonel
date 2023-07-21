@@ -14,51 +14,51 @@
       "unknown": "Unknown error occurred."
     }
   },
-    "entity": {
+  "entity": {
     "climate": {
       "shower": {
-        "name": "Shower"
+        "name": "Ducha"
       }
     },
     "light": {
       "shower_light": {
-        "name": "Shower light"
+        "name": "Luz da ducha"
       }
     },
     "number": {
       "shower_volume": {
-        "name": "Shower Volume"
+        "name": "Volume da ducha"
       }
     },
     "select": {
       "shower_parental_mode": {
-        "name": "Shower parental mode",
+        "name": "Ação controle dos pais da ducha",
         "state": {
-          "off": "Off",
-          "sound": "Sound",
-          "shutdown": "Shutdown",
-          "sound_and_shutdown": "Sound and shutdown"
+          "off": "Desativado",
+          "sound": "Sonoro",
+          "shutdown": "Desligar",
+          "sound_and_shutdown": "Sonoro e Desligar"
         }
       },
       "shower_control_mode": {
-        "name": "Shower control mode",
+        "name": "Mode de controle da ducha",
         "state": {
           "manual": "Manual",
-          "automatic": "Automatic"
+          "automatic": "Automatico"
         }
       },
       "shower_rgb_mode": {
-        "name": "Shower RGB Mode",
+        "name": "Modo RGB da ducha",
         "state": {
-          "power": "Power",
-          "temperature": "Temperature",
-          "fixed": "Fixed"
+          "power": "Potencia",
+          "temperature": "Temperatura",
+          "fixed": "Fixo"
         }
       }
     },
     "time": {
       "shower_parental_limit": {
-        "name": "Shower parental limit"
+        "name": "Tempo limite controle dos pais"
       }
     }
   }

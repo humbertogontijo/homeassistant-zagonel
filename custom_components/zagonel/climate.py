@@ -20,9 +20,10 @@ from .entity import ZagonelEntity
 
 ENTITY_DESCRIPTIONS = (
     ClimateEntityDescription(
-        key="temperature",
-        name="Temperature",
-        icon="mdi:led-strip",
+        key="shower",
+        name="Shower",
+        icon="mdi:shower-head",
+        translation_key="shower"
     ),
 )
 
@@ -65,7 +66,7 @@ class ZagonelClimate(ZagonelEntity, ClimateEntity):
     @property
     def hvac_mode(self) -> HVACMode | None:
         """Return the current HVAC mode."""
-        return HVACMode.OFF if self.coordinator.client.is_running() else HVACMode.HEAT
+        return HVACMode.HEAT if self.coordinator.client.is_running() else HVACMode.OFF
 
     @property
     def hvac_action(self) -> HVACAction:

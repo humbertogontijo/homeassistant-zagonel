@@ -13,9 +13,10 @@ from .entity import ZagonelEntity
 
 ENTITY_DESCRIPTIONS = (
     LightEntityDescription(
-        key="light",
-        name="LED",
+        key="shower_light",
+        name="Shower light",
         icon="mdi:led-strip",
+        translation_key="shower_light"
     ),
 )
 
@@ -35,7 +36,7 @@ async def async_setup_entry(hass, entry, async_add_devices):
 
 
 class ZagonelLight(ZagonelEntity, LightEntity):
-    """zagonel Sensor class."""
+    """Zagonel Light class."""
 
     _attr_color_mode = ColorMode.RGB
     _attr_supported_color_modes = {ColorMode.RGB}

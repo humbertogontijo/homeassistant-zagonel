@@ -10,13 +10,14 @@ from .entity import ZagonelEntity
 
 ENTITY_DESCRIPTIONS = (
     NumberEntityDescription(
-        key="sound_volume",
+        key="shower_volume",
         native_unit_of_measurement="%",
         native_max_value=100,
         native_min_value=0,
         native_step=1,
-        name="Volume",
+        name="Shower Volume",
         icon="mdi:volume-high",
+        translation_key="shower_volume"
     ),
 )
 
