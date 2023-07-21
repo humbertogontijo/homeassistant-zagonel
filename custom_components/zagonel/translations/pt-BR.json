@@ -75,9 +75,9 @@
       "shower_state": {
         "name": "Estado da ducha",
         "state": {
-          "RUN": "Ligado",
-          "IDL": "Ocioso",
-          "PSE": "Desligando"
+          "run": "Ligado",
+          "idl": "Ocioso",
+          "pse": "Desligando"
         }
       },
       "shower_water_flow": {

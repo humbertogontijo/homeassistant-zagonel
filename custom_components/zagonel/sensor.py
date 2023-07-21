@@ -45,7 +45,8 @@ ENTITY_DESCRIPTIONS = (
     ZagonelSensorEntityDescription(
         key="St",
         name="State",
-        translation_key="shower_state"
+        translation_key="shower_state",
+        value=lambda value: str(value).lower(),
     ),
     ZagonelSensorEntityDescription(
         key="Fl",

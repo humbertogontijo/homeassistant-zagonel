@@ -75,9 +75,9 @@
       "shower_state": {
         "name": "Shower state",
         "state": {
-          "RUN": "On",
-          "IDL": "Idle",
-          "PSE": "Shutting down"
+          "run": "On",
+          "idl": "Idle",
+          "pse": "Shutting down"
         }
       },
       "shower_water_flow": {
