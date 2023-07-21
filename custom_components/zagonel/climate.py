@@ -69,11 +69,6 @@ class ZagonelClimate(ZagonelEntity, ClimateEntity):
         return HVACMode.HEAT if self.coordinator.client.is_running() else HVACMode.OFF
 
     @property
-    def hvac_action(self) -> HVACAction:
-        """Return the current operation mode."""
-        return HVACAction.HEATING
-
-    @property
     def current_temperature(self) -> float | None:
         """Return the current temperature."""
         return math.floor(self.coordinator.data.status.To / 1000)

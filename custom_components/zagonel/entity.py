@@ -14,6 +14,7 @@ class ZagonelEntity(CoordinatorEntity[ZagonelDataUpdateCoordinator]):
     """ZagonelEntity class."""
 
     _attr_attribution = ATTRIBUTION
+    _attr_has_entity_name = True
 
     def __init__(self, unique_id: str, coordinator: ZagonelDataUpdateCoordinator) -> None:
         """Initialize."""
