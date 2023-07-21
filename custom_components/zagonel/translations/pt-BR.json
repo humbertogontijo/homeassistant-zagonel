@@ -17,15 +17,15 @@
   "entity": {
     "climate": {
       "shower": {
-        "name": "Ducha"
-      },
-      "state_attributes": {
-        "preset_mode": {
-          "state": {
-            "preset_1": "Predefinido 1",
-            "preset_2": "Predefinido 2",
-            "preset_3": "Predefinido 3",
-            "preset_4": "Predefinido 4"
+        "name": "Ducha",
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "preset_1": "Predefinido 1",
+              "preset_2": "Predefinido 2",
+              "preset_3": "Predefinido 3",
+              "preset_4": "Predefinido 4"
+            }
           }
         }
       }
