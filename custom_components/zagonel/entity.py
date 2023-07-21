@@ -1,7 +1,7 @@
 """ZagonelEntity class."""
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
@@ -27,7 +27,7 @@ class ZagonelEntity(CoordinatorEntity[ZagonelDataUpdateCoordinator]):
             manufacturer=NAME,
         )
 
-    async def send(self, command: str, value: Optional[Any] = None):
+    async def send(self, command: str, value: Any | None = None):
         """send."""
         payload = {
             "command": command

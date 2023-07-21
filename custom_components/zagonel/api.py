@@ -5,7 +5,7 @@ import json
 import logging
 from dataclasses import asdict, dataclass
 from enum import Enum, IntEnum
-from typing import Any, Literal, Optional
+from typing import Any, Literal
 
 import paho.mqtt.client as mqtt
 from dacite import Config, from_dict
@@ -103,52 +103,52 @@ class ZagonelBase:
 class ZagonelChars(ZagonelBase):
     """ZagonelChars."""
 
-    Type: Optional[Literal["Chars"]] = None
-    User_Id: Optional[str] = None
-    Device_Id: Optional[str] = None
-    Hw_Id: Optional[str] = None
-    Hw_Version: Optional[str] = None
-    Fw_Version: Optional[str] = None
-    Fw_Timestamp: Optional[str] = None
-    Control_Mode: Optional[ZagonelControlMode] = None
-    Rgb_Mode: Optional[ZagonelRGBMode] = None
-    Rgb_Color: Optional[str] = None
-    Buzzer_Volume: Optional[int] = None
-    Parental_Mode: Optional[ZagonelParentalMode] = None
-    Parental_Limit: Optional[int] = None
-    Preset_1: Optional[int] = None
-    Preset_2: Optional[int] = None
-    Preset_3: Optional[int] = None
-    Preset_4: Optional[int] = None
-    Wifi_SSID: Optional[str] = None
+    Type: Literal["Chars"] | None = None
+    User_Id: str | None = None
+    Device_Id: str | None = None
+    Hw_Id: str | None = None
+    Hw_Version: str | None = None
+    Fw_Version: str | None = None
+    Fw_Timestamp: str | None = None
+    Control_Mode: ZagonelControlMode | None = None
+    Rgb_Mode: ZagonelRGBMode | None = None
+    Rgb_Color: str | None = None
+    Buzzer_Volume: int | None = None
+    Parental_Mode: ZagonelParentalMode | None = None
+    Parental_Limit: int | None = None
+    Preset_1: int | None = None
+    Preset_2: int | None = None
+    Preset_3: int | None = None
+    Preset_4: int | None = None
+    Wifi_SSID: str | None = None
 
 
 @dataclass
 class ZagonelStatus(ZagonelBase):
     """ZagonelStatus."""
 
-    Type: Optional[Literal["Status"]] = None
-    St: Optional[str] = None
-    Fl: Optional[int] = None
-    Vi: Optional[int] = None
-    Ti: Optional[int] = None
-    To: Optional[int] = None
-    Ts: Optional[int] = None
-    Ps: Optional[int] = None
-    De: Optional[int] = None
-    Pw: Optional[int] = None
-    Hp: Optional[int] = None
-    Up: Optional[int] = None
-    Pp: Optional[int] = None
-    Wi: Optional[int] = None
+    Type: Literal["Status"] | None = None
+    St: str | None = None
+    Fl: int | None = None
+    Vi: int | None = None
+    Ti: int | None = None
+    To: int | None = None
+    Ts: int | None = None
+    Ps: int | None = None
+    De: int | None = None
+    Pw: int | None = None
+    Hp: int | None = None
+    Up: int | None = None
+    Pp: int | None = None
+    Wi: int | None = None
 
 
 @dataclass
 class ZagonelData(ZagonelBase):
     """ZagonelData."""
 
-    chars: Optional[ZagonelChars] = None
-    status: Optional[ZagonelStatus] = None
+    chars: ZagonelChars | None = None
+    status: ZagonelStatus | None = None
 
 
 class ZagonelApiClient:
@@ -161,7 +161,7 @@ class ZagonelApiClient:
         """Sample API Client."""
         self._device_id = device_id
         self._client = mqtt.Client(transport="websockets")
-        self.data: Optional[ZagonelData] = None
+        self.data: ZagonelData | None = None
         self.waiting_queue: list[ZagonelFuture] = []
 
     def on_connect(self, _userdata=None, _flags_dict=None, _reason=None, _properties=None):
