@@ -2,7 +2,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Callable, TypeVar
+from typing import TypeVar
+from collections.abc import Callable
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -29,6 +30,7 @@ T = TypeVar("T")
 @dataclass
 class ZagonelSensorEntityDescriptionMixin:
     """ZagonelSensorEntityDescriptionMixin."""
+
     value: Callable[[T], T] = None
 
 
