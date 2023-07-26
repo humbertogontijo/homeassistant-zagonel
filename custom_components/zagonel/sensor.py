@@ -11,6 +11,7 @@ from homeassistant.components.sensor import (
     SensorEntityDescription, SensorStateClass,
 )
 from homeassistant.const import (
+    PERCENTAGE,
     SIGNAL_STRENGTH_DECIBELS,
     UnitOfElectricPotential,
     UnitOfPower,
@@ -73,7 +74,7 @@ ENTITY_DESCRIPTIONS = (
     ),
     ZagonelSensorEntityDescription(
         key="Ts",
-        name="Expected Temperature",
+        name="Current Temperature Target",
         translation_key="shower_expected_temperature",
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.TEMPERATURE,
@@ -82,8 +83,11 @@ ENTITY_DESCRIPTIONS = (
     ),
     ZagonelSensorEntityDescription(
         key="Ps",
-        name="Ps",
+        name="Current Power Factor",
+        translation_key="shower_power_factor",
         state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.POWER_FACTOR,
+        native_unit_of_measurement=PERCENTAGE,
     ),
     ZagonelSensorEntityDescription(
         key="De",

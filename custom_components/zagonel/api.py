@@ -233,6 +233,16 @@ class ZagonelApiClient:
         """Get data from the API."""
         if not self.is_connected():
             await self.connect()
-        await self.send_command({"command": "getStatus"})
+        try:
+            await self.send_command({"command": "getStatus"})
+        except ZagonelApiClientError as e:
+            if not self.data.status:
+                raise e
+            _LOGGER.warning(e)
         if not self.is_running():
-            await self.send_command({"command": "getChars"})
+            try:
+                await self.send_command({"command": "getChars"})
+            except ZagonelApiClientError as e:
+                if not self.data.chars:
+                    raise e
+                _LOGGER.warning(e)

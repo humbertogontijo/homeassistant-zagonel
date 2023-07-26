@@ -89,6 +89,9 @@
       "shower_expected_temperature": {
         "name": "Temperatura esperada da ducha"
       },
+      "shower_power_factor": {
+        "name": "Fator de potencia da ducha"
+      },
       "shower_target_power": {
         "name": "Potencia alvo da ducha"
       },

@@ -84,10 +84,13 @@
         "name": "Shower water flow"
       },
       "shower_voltage": {
-        "name": "Shower boltage"
+        "name": "Shower voltage"
       },
       "shower_expected_temperature": {
         "name": "Shower expected temperature"
+      },
+      "shower_power_factor": {
+        "name": "Shower power factor"
       },
       "shower_target_power": {
         "name": "Shower target power"
